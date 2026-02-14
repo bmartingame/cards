@@ -26,47 +26,51 @@ function onLoad()
 end
 
 function createUI()
+    -- Input field (moved up and shorter)
     self.createInput({
         input_function = "onInputChanged",
         function_owner = self,
         label          = "Paste decklist here",
         alignment      = 3,
-        position       = {0, 0.25, -0.2},
+        position       = {0, 0.25, -1.1},
         width          = 3000,
-        height         = 1200,
+        height         = 850,
         font_size      = 180,
-        validation     = 1, -- allow multiline
+        validation     = 1,
         value          = deckText
     })
 
+    -- Spawn Deck
     self.createButton({
         click_function = "spawnDeckFromInput",
         function_owner = self,
         label          = "SPAWN DECK",
-        position       = {0, 0.25, 0.9},
-        width          = 1400,
+        position       = {0, 0.25, 0.4},
+        width          = 1800,
         height         = 320,
-        font_size      = 200
+        font_size      = 220
     })
 
+    -- Clear
     self.createButton({
         click_function = "clearInput",
         function_owner = self,
         label          = "CLEAR",
-        position       = {0, 0.25, 1.35},
+        position       = {0, 0.25, 0.9},
         width          = 1400,
         height         = 260,
         font_size      = 170
     })
 
+    -- Spawn To Hand
     self.createButton({
         click_function = "spawnDeckToHand",
         function_owner = self,
         label          = "SPAWN TO HAND",
-        position       = {0, 0.25, 1.75},
-        width          = 1400,
-        height         = 260,
-        font_size      = 170
+        position       = {0, 0.25, 1.3},
+        width          = 2000,
+        height         = 320,
+        font_size      = 200
     })
 end
 
@@ -127,12 +131,21 @@ function parseDecklist(text)
             -- strip common prefixes like "SB:" / "Sideboard:" (we just ignore sideboard lines by default)
             local isSideboard = raw:lower():match("^sb:") or raw:lower():match("^sideboard:")
             if not isSideboard then
-                local qty, name = raw:match("^(%d+)%s*[xX]?%s+(.+)$")
-                if not qty then
-                    name = raw
-                    qty = "1"
-                end
-                name = name:gsub("%s+$", "")
+                -- Supports:
+		--  4 Card Name
+		--  4x Card Name
+		--  Card Name x 4
+		--  Card Name x4
+		--  Card Name × 4   (unicode multiply)
+		local qty, name = raw:match("^(%d+)%s*[xX]?%s+(.+)$") -- qty first
+		if not qty then
+    			name, qty = raw:match("^(.+)%s+[xX×]%s*(%d+)$")   -- qty last
+		end
+		if not qty then
+    			name = raw
+    			qty = "1"
+		end
+		name = name:gsub("%s+$", "")
                 table.insert(entries, {name = name, qty = tonumber(qty) or 1})
             end
         end
