@@ -443,6 +443,10 @@
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Forbidden%20Acolyte%20%28U%29.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
   },
+  "Forest": {
+    "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Forest.jpg",
+    "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
+  },
   "Frank (U)": {
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Frank%20%28U%29.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
@@ -591,6 +595,10 @@
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Iskryn%2C%20Devotee%20of%20Justice%20%28R%29.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
   },
+  "Island": {
+    "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Island.jpg",
+    "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
+  },
   "Jack Heart, Cursed Gambler (R)": {
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Jack%20Heart%2C%20Cursed%20Gambler%20%28R%29.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
@@ -719,6 +727,10 @@
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Moss%20Outbreak%20%28R%29.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
   },
+  "Mountain": {
+    "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Mountain.jpg",
+    "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
+  },
   "Multiplying Possibility (R)": {
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Multiplying%20Possibility%20%28R%29.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
@@ -805,6 +817,10 @@
   },
   "Plague Host (R)": {
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Plague%20Host%20%28R%29.jpg",
+    "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
+  },
+  "Plains": {
+    "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Plains.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
   },
   "Portable Forge (R)": {
@@ -1057,6 +1073,10 @@
   },
   "Suzie, Veteran of a Hundred Battles (U)": {
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Suzie%2C%20Veteran%20of%20a%20Hundred%20Battles%20%28U%29.jpg",
+    "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
+  },
+  "Swamp": {
+    "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Swamp.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
   },
   "Sword of Big-Man Strong-Fist (R)": {
