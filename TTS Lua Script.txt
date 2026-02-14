@@ -1,0 +1,235 @@
+-- ====== CONFIG ======
+DB_URL = "https://raw.githubusercontent.com/bmartingame/cards/main/cards_db.json"  -- direct URL to the JSON file
+FALLBACK_BACK_URL = "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
+
+-- Spawn position relative to this object
+SPAWN_OFFSET = {x = 0, y = 2, z = 3}
+
+-- ====== INTERNAL STATE ======
+cardDB = nil          -- name -> {face, back}
+cardDBLower = nil     -- lowercase name -> original name
+deckText = ""
+statusText = "Loading card database..."
+
+-- Simple deterministic hash -> number (to create unique CustomDeck IDs per card)
+function hashToDeckId(s)
+    local h = 5381
+    for i = 1, #s do
+        h = (bit32.bxor(h * 33, string.byte(s, i))) % 1000000007
+    end
+    return (h % 9000) + 1
+end
+
+function onLoad()
+    createUI()
+    fetchDB()
+end
+
+function createUI()
+    self.createInput({
+        input_function = "onInputChanged",
+        function_owner = self,
+        label          = "Paste decklist here",
+        alignment      = 3,
+        position       = {0, 0.25, -0.2},
+        width          = 3000,
+        height         = 1200,
+        font_size      = 180,
+        validation     = 1, -- allow multiline
+        value          = deckText
+    })
+
+    self.createButton({
+        click_function = "spawnDeckFromInput",
+        function_owner = self,
+        label          = "SPAWN DECK",
+        position       = {0, 0.25, 0.9},
+        width          = 1400,
+        height         = 320,
+        font_size      = 200
+    })
+
+    self.createButton({
+        click_function = "clearInput",
+        function_owner = self,
+        label          = "CLEAR",
+        position       = {0, 0.25, 1.35},
+        width          = 1400,
+        height         = 260,
+        font_size      = 170
+    })
+
+    self.createButton({
+        click_function = "spawnDeckToHand",
+        function_owner = self,
+        label          = "SPAWN TO HAND",
+        position       = {0, 0.25, 1.75},
+        width          = 1400,
+        height         = 260,
+        font_size      = 170
+    })
+end
+
+function setStatus(msg)
+    statusText = msg
+    self.setDescription(msg)
+end
+
+function fetchDB()
+    setStatus("Loading card database...")
+    WebRequest.get(DB_URL, function(req)
+        if req.is_error then
+            setStatus("ERROR: Could not load cards_db.json")
+            print("DB load error: " .. tostring(req.error))
+            return
+        end
+
+        local ok, parsed = pcall(JSON.decode, req.text)
+        if not ok or type(parsed) ~= "table" then
+            setStatus("ERROR: cards_db.json is not valid JSON")
+            return
+        end
+
+        cardDB = parsed
+        cardDBLower = {}
+        for name, _ in pairs(cardDB) do
+            cardDBLower[string.lower(name)] = name
+        end
+
+        setStatus("Ready. Loaded " .. tostring(countKeys(cardDB)) .. " cards.")
+    end)
+end
+
+function countKeys(t)
+    local c = 0
+    for _ in pairs(t) do c = c + 1 end
+    return c
+end
+
+function onInputChanged(obj, playerColor, input, stillEditing)
+    deckText = input
+end
+
+function clearInput()
+    deckText = ""
+    self.editInput({index = 0, value = ""})
+end
+
+-- Parses lines like:
+-- 4 Card Name
+-- 1x Card Name
+-- Card Name (assumes 1)
+function parseDecklist(text)
+    local entries = {}  -- {name=, qty=}
+    for line in string.gmatch(text .. "\n", "(.-)\n") do
+        local raw = line:gsub("\r", ""):gsub("^%s+", ""):gsub("%s+$", "")
+        if raw ~= "" and not raw:match("^#") then
+            -- strip common prefixes like "SB:" / "Sideboard:" (we just ignore sideboard lines by default)
+            local isSideboard = raw:lower():match("^sb:") or raw:lower():match("^sideboard:")
+            if not isSideboard then
+                local qty, name = raw:match("^(%d+)%s*[xX]?%s+(.+)$")
+                if not qty then
+                    name = raw
+                    qty = "1"
+                end
+                name = name:gsub("%s+$", "")
+                table.insert(entries, {name = name, qty = tonumber(qty) or 1})
+            end
+        end
+    end
+    return entries
+end
+
+function resolveCardName(name)
+    if not cardDBLower then return nil end
+    local key = string.lower(name)
+    return cardDBLower[key]
+end
+
+-- Spawns a single custom card
+function spawnCustomCard(cardName, faceURL, backURL, position)
+    local deckId = hashToDeckId(cardName)
+    local data = {
+        Name = "CardCustom",
+        Transform = {
+            posX = position.x, posY = position.y, posZ = position.z,
+            rotX = 0, rotY = 180, rotZ = 0,
+            scaleX = 1, scaleY = 1, scaleZ = 1
+        },
+        Nickname = cardName,
+        Description = "",
+        CardID = deckId * 100 + 1,
+        CustomDeck = {}
+    }
+
+    data.CustomDeck[tostring(deckId)] = {
+        FaceURL = faceURL,
+        BackURL = backURL or FALLBACK_BACK_URL,
+        NumWidth = 1,
+        NumHeight = 1,
+        BackIsHidden = true,
+        UniqueBack = false
+    }
+
+    spawnObjectData({data = data})
+end
+
+-- Core: spawn deck at the table in front of loader
+function spawnDeckAtPosition(playerColor, pos)
+    if not cardDB then
+        broadcastToColor("Card DB not loaded yet.", playerColor, {1,0.3,0.3})
+        return
+    end
+
+    local entries = parseDecklist(deckText)
+    if #entries == 0 then
+        broadcastToColor("Paste a decklist first.", playerColor, {1,0.8,0.2})
+        return
+    end
+
+    local spawned = 0
+    local missing = {}
+
+    local x = pos.x
+    local y = pos.y
+    local z = pos.z
+
+    for _, e in ipairs(entries) do
+        local resolved = resolveCardName(e.name)
+        if not resolved then
+            table.insert(missing, e.name)
+        else
+            local info = cardDB[resolved]
+            for i = 1, e.qty do
+                -- stack with tiny Y offsets so they naturally merge into a deck
+                local p = {x = x, y = y + (spawned * 0.03), z = z}
+                spawnCustomCard(resolved, info.face, info.back, p)
+                spawned = spawned + 1
+            end
+        end
+    end
+
+    if #missing > 0 then
+        print("Missing cards (" .. tostring(#missing) .. "):")
+        for _, m in ipairs(missing) do print("  - " .. m) end
+        broadcastToColor("Spawned " .. spawned .. ". Missing " .. #missing .. " (see chat log).", playerColor, {1,0.6,0.2})
+    else
+        broadcastToColor("Spawned deck (" .. spawned .. " cards).", playerColor, {0.6,1,0.6})
+    end
+end
+
+function spawnDeckFromInput(obj, playerColor)
+    local base = self.getPosition()
+    local pos = {x = base.x + SPAWN_OFFSET.x, y = base.y + SPAWN_OFFSET.y, z = base.z + SPAWN_OFFSET.z}
+    spawnDeckAtPosition(playerColor, pos)
+end
+
+function spawnDeckToHand(obj, playerColor)
+    local hand = Player[playerColor].getHandTransform(1)
+    if not hand then
+        broadcastToColor("No hand zone found for you.", playerColor, {1,0.3,0.3})
+        return
+    end
+    local pos = {x = hand.position.x, y = hand.position.y + 2, z = hand.position.z}
+    spawnDeckAtPosition(playerColor, pos)
+end
