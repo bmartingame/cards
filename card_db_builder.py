@@ -4,8 +4,8 @@ import urllib.parse
 
 # EDIT THESE:
 CARDS_FOLDER = r"./Front"
-BASE_URL = "https://github.com/bmartingame/cards/blob/main/Front/"   # must end with /
-DEFAULT_BACK_URL = "https://github.com/bmartingame/cards/blob/main/Magic_card_back.jpg"
+BASE_URL = "https://raw.githubusercontent.com/bmartingame/cards/main/Front/"   # must end with /
+DEFAULT_BACK_URL = "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
 
 def is_image(fn: str) -> bool:
     return fn.lower().endswith((".jpg", ".jpeg", ".png", ".webp"))
