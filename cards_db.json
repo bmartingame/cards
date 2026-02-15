@@ -639,6 +639,10 @@
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Kage%2C%20Ambush%20Predator%20%28R%29.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
   },
+  "Kasey, Fragmented Remnant (U)": {
+    "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Kasey%2C%20Fragmented%20Remnant%20%28U%29.jpg",
+    "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
+  },
   "Kely Latagu, Charming Gladiator (R)": {
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Kely%20Latagu%2C%20Charming%20Gladiator%20%28R%29.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
@@ -681,6 +685,10 @@
   },
   "Magby's Dealings (U)": {
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Magby%27s%20Dealings%20%28U%29.jpg",
+    "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
+  },
+  "Maggie, Guard of the Princess (R)": {
+    "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Maggie%2C%20Guard%20of%20the%20Princess%20%28R%29.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
   },
   "Mana Theft (R)": {
@@ -777,6 +785,10 @@
   },
   "Ozamog, Infernal Liason (U)": {
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Ozamog%2C%20Infernal%20Liason%20%28U%29.jpg",
+    "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
+  },
+  "Parvan, Willing Host (R)": {
+    "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Parvan%2C%20Willing%20Host%20%28R%29.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
   },
   "Payment Enforcer (R)": {
@@ -977,6 +989,10 @@
   },
   "Samej Scintilla, Cursed Caster (R)": {
     "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Samej%20Scintilla%2C%20Cursed%20Caster%20%28R%29.jpg",
+    "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
+  },
+  "Samej, Catalyst (R)": {
+    "face": "https://raw.githubusercontent.com/bmartingame/cards/main/Front/Samej%2C%20Catalyst%20%28R%29.jpg",
     "back": "https://raw.githubusercontent.com/bmartingame/cards/main/Magic_card_back.jpg"
   },
   "Sanctified Interlude (U)": {
